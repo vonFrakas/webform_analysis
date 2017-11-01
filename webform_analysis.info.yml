@@ -4,3 +4,6 @@ description: 'Webform Analysis'
 package: Webform
 core: '8.x'
 version: '8.x-1.0'
+
+dependencies:
+  - webform
