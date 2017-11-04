@@ -20,11 +20,15 @@ class WebformAnalysisForm extends FormBase {
     return 'webform_analysis_form';
   }
 
+  /**
+   * Get webform title
+   * @return string
+   */
   public function getTitle() {
 
     $webform_id = $this->getWebformIdFromRoute();
     if (!$webform_id)
-      return [];
+      return '';
 
     $webform = \Drupal::entityTypeManager()->getStorage('webform')->load($webform_id);
     return $webform->label();
@@ -67,7 +71,7 @@ class WebformAnalysisForm extends FormBase {
           break;
         case 'PieChart':
           $chart['options'] = ['pieHole' => 0.2];
-          $chart['data']    = $this->analysis->getComponentRows($component, $header, true);
+          $chart['data']    = $this->analysis->getComponentRows($component, $header, TRUE);
           break;
         default:
           $chart['data']    = $this->analysis->getComponentRows($component, $header);
@@ -95,7 +99,7 @@ class WebformAnalysisForm extends FormBase {
     $form['components_settings'] = [
       '#type'               => 'details',
       '#title'              => $this->t('Add analysis components'),
-      '#open'               => false,
+      '#open'               => FALSE,
       'analysis_components' => $this->getComponents(),
     ];
 
@@ -128,6 +132,10 @@ class WebformAnalysisForm extends FormBase {
     return $form;
   }
 
+  /**
+   * Get Components
+   * @return array
+   */
   public function getComponents() {
 
     foreach ($this->analysis->getElements() as $element_name => $element)
@@ -154,14 +162,18 @@ class WebformAnalysisForm extends FormBase {
     $this->analysis->setComponents($components);
   }
   
+  /**
+   * Get Webform Id
+   * @return string webform_id
+   */
   public function getWebformIdFromRoute(){
     $route = $this->getRouteMatch();
     if(!$route)
-      return false;
+      return '';
 
     $webform_id = $route->getParameter('webform');
     if (!$webform_id)
-      return false;
+      return '';
     return $webform_id;
   }
 

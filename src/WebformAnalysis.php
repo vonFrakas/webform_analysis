@@ -4,6 +4,11 @@ namespace Drupal\webform_analysis;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
+ /**
+  * WebformAnalysis.
+  *
+  * @author Laurent BARAN <lbaran27@gmail.com>
+  */
 class WebformAnalysis {
 
   use StringTranslationTrait;
@@ -11,6 +16,10 @@ class WebformAnalysis {
   protected $webform;
   protected $elements;
 
+  /**
+   * construct
+   * @param string $webform_id
+   */
   public function __construct($webform_id) {
     $this->webform = \Drupal::entityTypeManager()->getStorage('webform')->load($webform_id);
   }
@@ -37,7 +46,7 @@ class WebformAnalysis {
    * @return array
    */
   public function getComponents() {
-    return $this->webform->getSetting('analysis_components');
+    return (array)$this->webform->getSetting('analysis_components');
   }
 
   /**
@@ -54,7 +63,7 @@ class WebformAnalysis {
    * @return array
    */
   public function getChartType() {
-    return $this->webform->getSetting('analysis_chart_type');
+    return (string)$this->webform->getSetting('analysis_chart_type');
   }
 
   /**
@@ -66,7 +75,7 @@ class WebformAnalysis {
       $this->elements = $this->webform->getElementsDecoded();
       $types = $this->getDisableElementTypes();
       foreach ($this->elements as $key => $element) {
-        if (array_search($element['#type'],$types) !== false)
+        if (array_search($element['#type'],$types) !== FALSE)
           unset($this->elements[$key]);
       }
     }
@@ -111,7 +120,7 @@ class WebformAnalysis {
    * @param bool $value_label_with_count
    * @return array
    */
-  public function getComponentRows($component, $header = array(), $value_label_with_count = false) {
+  public function getComponentRows($component, $header = array(), $value_label_with_count = FALSE) {
     $rows   = [];
     if ($header)
       $rows[] = $header;
@@ -133,9 +142,15 @@ class WebformAnalysis {
 
       $rows[] = [(string) $value_label, $count];
     }
+    
     return $rows;
   }
 
+  /**
+   * Get Component title
+   * @param string $component
+   * @return string
+   */
   public function getComponentTitle($component) {
     if (!isset($this->getElements()[$component]['#title']))
       return $component;
