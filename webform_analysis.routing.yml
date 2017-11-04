@@ -3,6 +3,5 @@ entity.webform.results_analysis:
   defaults:
     _form: '\Drupal\webform_analysis\Form\WebformAnalysisForm'
     _title_callback: '\Drupal\webform_analysis\Form\WebformAnalysisForm::getTitle'
-#    _title: 'Webform Analysis'
   requirements:
     _permission: 'webform.submission_view_any'
