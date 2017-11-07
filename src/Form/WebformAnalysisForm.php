@@ -27,8 +27,9 @@ class WebformAnalysisForm extends FormBase {
   public function getTitle() {
 
     $webform_id = $this->getWebformIdFromRoute();
-    if (empty($webform_id))
+    if (empty($webform_id)){
       return '';
+    }
 
     $webform = \Drupal::entityTypeManager()->getStorage('webform')->load($webform_id);
     return $webform->label();
@@ -40,8 +41,9 @@ class WebformAnalysisForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $webform_id = $this->getWebformIdFromRoute();
-    if (empty($webform_id))
+    if (empty($webform_id)){
       return [];
+    }
 
     $this->analysis = new WebformAnalysis($webform_id);
 
@@ -89,11 +91,14 @@ class WebformAnalysisForm extends FormBase {
         ],
       ];
 
-      if (!$chart['type'])
+      if (!$chart['type']){
         $form['components_data']['component__' . $component]['#data']['#rows'] = $chart['data'];
-
-      if ($chart['type'])
+      }
+      
+      if ($chart['type']){
         $charts[] = $chart;
+      }
+      
     }
 
     $form['components_settings'] = [
@@ -156,9 +161,11 @@ class WebformAnalysisForm extends FormBase {
     $this->analysis->setChartType($form_state->getValue('analysis_chart_type'));
 
     $components   = [];
-    foreach ($form_state->getValue('analysis_components') as $name => $value)
-      if ($value)
+    foreach ($form_state->getValue('analysis_components') as $name => $value){
+      if ($value){
         $components[] = $name;
+      }
+    }
     $this->analysis->setComponents($components);
   }
 
@@ -168,13 +175,15 @@ class WebformAnalysisForm extends FormBase {
    */
   public function getWebformIdFromRoute() {
     $route = $this->getRouteMatch();
-    if (empty($route))
+    if (empty($route)){
       return '';
+    }
 
     $webform_id = $route->getParameter('webform');
     if (empty($webform_id)) {
       return '';
     }
+    
     return $webform_id;
   }
 
