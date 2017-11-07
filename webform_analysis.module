@@ -9,7 +9,7 @@ function webform_analysis_theme() {
       'variables' => [
         'name'  => '',
         'title' => '',
-        'data'  => null,
+        'data'  => NULL,
       ],
     ],
   ];

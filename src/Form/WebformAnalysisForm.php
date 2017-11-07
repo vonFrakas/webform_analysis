@@ -16,18 +16,18 @@ class WebformAnalysisForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormID() {
+  public function getFormId() {
     return 'webform_analysis_form';
   }
 
   /**
    * Get webform title
-   * @return string
+   * @return string title
    */
   public function getTitle() {
 
     $webform_id = $this->getWebformIdFromRoute();
-    if (!$webform_id)
+    if (empty($webform_id))
       return '';
 
     $webform = \Drupal::entityTypeManager()->getStorage('webform')->load($webform_id);
@@ -40,7 +40,7 @@ class WebformAnalysisForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $webform_id = $this->getWebformIdFromRoute();
-    if (!$webform_id)
+    if (empty($webform_id))
       return [];
 
     $this->analysis = new WebformAnalysis($webform_id);
@@ -62,7 +62,7 @@ class WebformAnalysisForm extends FormBase {
       $chart = [
         'type'     => $this->analysis->getChartType(),
         'options'  => [],
-        'selector' => '.' . $class_css
+        'selector' => '.' . $class_css,
       ];
 
       switch ($chart['type']) {
@@ -82,11 +82,11 @@ class WebformAnalysisForm extends FormBase {
         '#theme' => 'webform_analysis_component',
         '#name'  => $component,
         '#title' => $this->analysis->getComponentTitle($component),
-        '#data' => [
+        '#data'  => [
           '#theme'  => 'table',
           '#prefix' => '<div class="' . $class_css . '">',
           '#suffix' => '</div>',
-        ]
+        ],
       ];
 
       if (!$chart['type'])
@@ -111,7 +111,7 @@ class WebformAnalysisForm extends FormBase {
         ''            => $this->t('Table'),
         'PieChart'    => $this->t('Pie Charts'),
         'ColumnChart' => $this->t('Column Charts'),
-      ]
+      ],
     ];
 
     $form['actions']['#type']  = 'actions';
@@ -126,7 +126,7 @@ class WebformAnalysisForm extends FormBase {
 
     $form['#attached']['drupalSettings']['webformcharts'] = [
       'packages' => ['corechart'],
-      'charts'   => $charts
+      'charts'   => $charts,
     ];
 
     return $form;
@@ -144,7 +144,7 @@ class WebformAnalysisForm extends FormBase {
     return [
       '#type'          => 'checkboxes',
       '#options'       => $options,
-      '#default_value' => (array) $this->analysis->getComponents()
+      '#default_value' => (array) $this->analysis->getComponents(),
     ];
   }
 
@@ -161,19 +161,20 @@ class WebformAnalysisForm extends FormBase {
         $components[] = $name;
     $this->analysis->setComponents($components);
   }
-  
+
   /**
    * Get Webform Id
    * @return string webform_id
    */
-  public function getWebformIdFromRoute(){
+  public function getWebformIdFromRoute() {
     $route = $this->getRouteMatch();
-    if(!$route)
+    if (empty($route))
       return '';
 
     $webform_id = $route->getParameter('webform');
-    if (!$webform_id)
+    if (empty($webform_id)) {
       return '';
+    }
     return $webform_id;
   }
 

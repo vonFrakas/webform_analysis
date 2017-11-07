@@ -25,7 +25,7 @@ class WebformAnalysis {
   }
 
   /**
-   * getWebform
+   * Get Webform
    * @return Webform
    */
   public function getWebform() {
