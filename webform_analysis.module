@@ -1,7 +1,12 @@
 <?php
 
 /**
- * Implement hook_theme()
+ * @file
+ * Webform Analysis - Module.
+ */
+
+/**
+ * Implements hook_theme()
  */
 function webform_analysis_theme() {
   return [
