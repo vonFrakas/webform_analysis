@@ -19,7 +19,7 @@ class WebformAnalysis {
   /**
    * Construct.
    *
-   * @param string $webform_id.
+   * @param string $webform_id
    *   The webform Id.
    */
   public function __construct($webform_id) {
@@ -42,7 +42,7 @@ class WebformAnalysis {
    * @param array $components
    *   The components name.
    */
-  public function setComponents($components = array()) {
+  public function setComponents($components = []) {
     $this->webform->setSetting('analysis_components', $components);
     $this->webform->save();
   }
@@ -63,7 +63,7 @@ class WebformAnalysis {
    * @param array $chart_type
    *   Set chart type and save webform.
    */
-  public function setChartType($chart_type) {
+  public function setChartType($chart_type = []) {
     $this->webform->setSetting('analysis_chart_type', $chart_type);
     $this->webform->save();
   }
@@ -81,7 +81,7 @@ class WebformAnalysis {
   /**
    * Get Elements.
    *
-   * @return array 
+   * @return array
    *   Element.
    */
   public function getElements() {
@@ -118,12 +118,12 @@ class WebformAnalysis {
    */
   public function getComponentValuesCount($component) {
 
-    $query   = \Drupal::database()
+    $query = \Drupal::database()
         ->select('webform_submission_data', 'wsd')
-        ->fields('wsd', array('value'));
+        ->fields('wsd', ['value']);
     $query->addExpression('COUNT(value)', 'quantity');
     $query->condition('webform_id', $this->webform->id())
-        ->condition('name', $component);
+          ->condition('name', $component);
     $query->groupBy('wsd.value');
     $records = $query->execute()->fetchAll();
 
@@ -140,15 +140,15 @@ class WebformAnalysis {
    *
    * @param string $component
    *   The component name.
-   * @param bool $add_header
+   * @param array $header
    *   The first line data.
    * @param bool $value_label_with_count
-   *   If true, add count to label
+   *   If true, add count to label.
    *
    * @return array
    *   Rows.
    */
-  public function getComponentRows($component, $header = array(), $value_label_with_count = FALSE) {
+  public function getComponentRows($component, $header = [], $value_label_with_count = FALSE) {
     $rows = [];
     if ($header) {
       $rows[] = $header;
@@ -158,6 +158,7 @@ class WebformAnalysis {
         case 'checkbox':
           $value_label = $value ? $this->t('Yes') : $this->t('No');
           break;
+
         default:
           $value_label = isset($this->getElements()[$component]['#options'][$value]) ? $this->getElements()[$component]['#options'][$value] : $value;
           break;
@@ -177,6 +178,7 @@ class WebformAnalysis {
    *
    * @param string $component
    *   The component name.
+   *
    * @return string
    *   Component title.
    */

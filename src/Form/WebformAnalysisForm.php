@@ -25,7 +25,8 @@ class WebformAnalysisForm extends FormBase {
   /**
    * Get webform title.
    *
-   * @return string Title.
+   * @return string
+   *   Title.
    */
   public function getTitle() {
 
@@ -145,7 +146,8 @@ class WebformAnalysisForm extends FormBase {
   /**
    * Get Components.
    *
-   * @return array Components renderable.
+   * @return array
+   *   Components renderable.
    */
   public function getComponents() {
 
@@ -179,7 +181,8 @@ class WebformAnalysisForm extends FormBase {
   /**
    * Get Webform Id.
    *
-   * @return string Webform Id.
+   * @return string
+   *   Webform Id.
    */
   public function getWebformIdFromRoute() {
     $route = $this->getRouteMatch();
