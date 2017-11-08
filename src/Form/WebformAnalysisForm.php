@@ -8,7 +8,7 @@ use Drupal\webform_analysis\WebformAnalysis;
 
 /**
  * Webform Analysis settings form.
- * 
+ *
  * @author Laurent BARAN <lbaran27@gmail.com>
  */
 class WebformAnalysisForm extends FormBase {
