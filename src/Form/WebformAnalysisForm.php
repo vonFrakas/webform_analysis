@@ -22,8 +22,8 @@ class WebformAnalysisForm extends FormBase {
 
   /**
    * Get webform title.
-   * 
-   * @return string title
+   *
+   * @return string title.
    */
   public function getTitle() {
 
@@ -70,14 +70,16 @@ class WebformAnalysisForm extends FormBase {
 
       switch ($chart['type']) {
         case '':
-          $chart['data']    = $this->analysis->getComponentRows($component);
+          $chart['data'] = $this->analysis->getComponentRows($component);
           break;
+        
         case 'PieChart':
           $chart['options'] = ['pieHole' => 0.2];
-          $chart['data']    = $this->analysis->getComponentRows($component, $header, TRUE);
+          $chart['data'] = $this->analysis->getComponentRows($component, $header, TRUE);
           break;
+        
         default:
-          $chart['data']    = $this->analysis->getComponentRows($component, $header);
+          $chart['data'] = $this->analysis->getComponentRows($component, $header);
           break;
       }
 
@@ -119,7 +121,8 @@ class WebformAnalysisForm extends FormBase {
       ],
     ];
 
-    $form['actions']['#type']  = 'actions';
+    $form['actions']['#type'] = 'actions';
+    
     $form['actions']['submit'] = [
       '#type'        => 'submit',
       '#value'       => $this->t('Update analysis display'),
@@ -139,14 +142,15 @@ class WebformAnalysisForm extends FormBase {
 
   /**
    * Get Components.
-   * 
-   * @return array
+   *
+   * @return array Components renderable.
    */
   public function getComponents() {
 
-    foreach ($this->analysis->getElements() as $element_name => $element)
+    foreach ($this->analysis->getElements() as $element_name => $element){
       $options[$element_name] = isset($element['#title']) ? $element['#title'] : $element_name;
-
+    }
+    
     return [
       '#type'          => 'checkboxes',
       '#options'       => $options,
@@ -172,8 +176,8 @@ class WebformAnalysisForm extends FormBase {
 
   /**
    * Get Webform Id.
-   * 
-   * @return string webform_id
+   *
+   * @return string Webform Id.
    */
   public function getWebformIdFromRoute() {
     $route = $this->getRouteMatch();
