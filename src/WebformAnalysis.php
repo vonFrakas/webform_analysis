@@ -4,11 +4,11 @@ namespace Drupal\webform_analysis;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 
- /**
-  * WebformAnalysis.
-  *
-  * @author Laurent BARAN <lbaran27@gmail.com>
-  */
+/**
+ * WebformAnalysis.
+ *
+ * @author Laurent BARAN <lbaran27@gmail.com>
+ */
 class WebformAnalysis {
 
   use StringTranslationTrait;
@@ -17,24 +17,27 @@ class WebformAnalysis {
   protected $elements;
 
   /**
-   * construct
-   * @param string $webform_id
+   * Construct.
+   *
+   * @param string $webform_id.
    */
   public function __construct($webform_id) {
     $this->webform = \Drupal::entityTypeManager()->getStorage('webform')->load($webform_id);
   }
 
   /**
-   * Get Webform
-   * @return Webform
+   * Get Webform.
+   *
+   * @return object Webform.
    */
   public function getWebform() {
     return $this->webform;
   }
 
   /**
-   * setComponents
-   * @param array $components
+   * Set Components.
+   *
+   * @param array Set components and save webform.
    */
   public function setComponents($components = array()) {
     $this->webform->setSetting('analysis_components', $components);
@@ -42,16 +45,18 @@ class WebformAnalysis {
   }
 
   /**
-   * getComponents
-   * @return array
+   * Get Components.
+   *
+   * @return array Components.
    */
   public function getComponents() {
-    return (array)$this->webform->getSetting('analysis_components');
+    return (array) $this->webform->getSetting('analysis_components');
   }
 
   /**
-   * setChartType
-   * @param array $components
+   * Set Chart Type.
+   *
+   * @param array Set chart type and save webform.
    */
   public function setChartType($chart_type) {
     $this->webform->setSetting('analysis_chart_type', $chart_type);
@@ -59,23 +64,25 @@ class WebformAnalysis {
   }
 
   /**
-   * getChartType
-   * @return array
+   * Get Chart Type.
+   *
+   * @return array Chart type.
    */
   public function getChartType() {
-    return (string)$this->webform->getSetting('analysis_chart_type');
+    return (string) $this->webform->getSetting('analysis_chart_type');
   }
 
   /**
-   * getElements
-   * @return array
+   * Get Elements.
+   *
+   * @return array Element.
    */
   public function getElements() {
     if (!$this->elements) {
       $this->elements = $this->webform->getElementsDecoded();
-      $types = $this->getDisableElementTypes();
+      $types          = $this->getDisableElementTypes();
       foreach ($this->elements as $key => $element) {
-        if (array_search($element['#type'],$types) !== FALSE)
+        if (array_search($element['#type'], $types) !== FALSE)
           unset($this->elements[$key]);
       }
     }
@@ -83,17 +90,20 @@ class WebformAnalysis {
   }
 
   /**
-   * getDisableElementTypes
-   * @return array
+   * Get Disable Element Types.
+   *
+   * @return array Element types.
    */
   public function getDisableElementTypes() {
-    return ['webform_markup','fieldset'];
+    return ['webform_markup', 'fieldset'];
   }
 
   /**
-   * getComponentValuesCount
+   * Get Component Values Count.
+   *
    * @param string $component
-   * @return array
+   *
+   * @return array Values.
    */
   public function getComponentValuesCount($component) {
 
@@ -106,54 +116,58 @@ class WebformAnalysis {
     $query->groupBy('wsd.value');
     $records = $query->execute()->fetchAll();
 
-    $values                 = [];
-    foreach ($records as $record)
+    $values = [];
+    foreach ($records as $record) {
       $values[$record->value] = (int) $record->quantity;
+    }
 
     return $values;
   }
 
   /**
-   * getComponentRows
+   * Get Component Rows.
+   *
    * @param string $component
    * @param bool $add_header
    * @param bool $value_label_with_count
-   * @return array
+   *
+   * @return array Rows.
    */
   public function getComponentRows($component, $header = array(), $value_label_with_count = FALSE) {
-    $rows   = [];
-    if ($header)
+    $rows = [];
+    if ($header) {
       $rows[] = $header;
+    }
     foreach ($this->getComponentValuesCount($component) as $value => $count) {
       switch ($this->getElements()[$component]['#type']) {
         case 'checkbox':
-          $value_label = $value 
-            ? $this->t('Yes') 
-            : $this->t('No');
+          $value_label = $value ? $this->t('Yes') : $this->t('No');
           break;
         default:
-          $value_label = isset($this->getElements()[$component]['#options'][$value]) 
-            ? $this->getElements()[$component]['#options'][$value] 
-            : $value;
+          $value_label = isset($this->getElements()[$component]['#options'][$value]) ? $this->getElements()[$component]['#options'][$value] : $value;
           break;
       }
-      if ($value_label_with_count)
+      if ($value_label_with_count) {
         $value_label .= ' : ' . $count;
+      }
 
       $rows[] = [(string) $value_label, $count];
     }
-    
+
     return $rows;
   }
 
   /**
-   * Get Component title
+   * Get Component title.
+   *
    * @param string $component
-   * @return string
+   *
+   * @return string Component title.
    */
   public function getComponentTitle($component) {
-    if (!isset($this->getElements()[$component]['#title']))
+    if (!isset($this->getElements()[$component]['#title'])) {
       return $component;
+    }
     return $this->getElements()[$component]['#title'];
   }
 
