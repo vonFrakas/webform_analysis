@@ -20,6 +20,7 @@ class WebformAnalysis {
    * Construct.
    *
    * @param string $webform_id.
+   *   The webform Id.
    */
   public function __construct($webform_id) {
     $this->webform = \Drupal::entityTypeManager()->getStorage('webform')->load($webform_id);
@@ -28,16 +29,18 @@ class WebformAnalysis {
   /**
    * Get Webform.
    *
-   * @return object Webform.
+   * @return object
+   *   Webform.
    */
   public function getWebform() {
     return $this->webform;
   }
 
   /**
-   * Set Components.
+   * Set components and save webform.
    *
-   * @param array Set components and save webform.
+   * @param array $components
+   *   The components name.
    */
   public function setComponents($components = array()) {
     $this->webform->setSetting('analysis_components', $components);
@@ -47,7 +50,8 @@ class WebformAnalysis {
   /**
    * Get Components.
    *
-   * @return array Components.
+   * @return array
+   *   Components.
    */
   public function getComponents() {
     return (array) $this->webform->getSetting('analysis_components');
@@ -56,7 +60,8 @@ class WebformAnalysis {
   /**
    * Set Chart Type.
    *
-   * @param array Set chart type and save webform.
+   * @param array $chart_type
+   *   Set chart type and save webform.
    */
   public function setChartType($chart_type) {
     $this->webform->setSetting('analysis_chart_type', $chart_type);
@@ -66,7 +71,8 @@ class WebformAnalysis {
   /**
    * Get Chart Type.
    *
-   * @return array Chart type.
+   * @return array
+   *   Chart type.
    */
   public function getChartType() {
     return (string) $this->webform->getSetting('analysis_chart_type');
@@ -75,15 +81,17 @@ class WebformAnalysis {
   /**
    * Get Elements.
    *
-   * @return array Element.
+   * @return array 
+   *   Element.
    */
   public function getElements() {
     if (!$this->elements) {
       $this->elements = $this->webform->getElementsDecoded();
       $types          = $this->getDisableElementTypes();
       foreach ($this->elements as $key => $element) {
-        if (array_search($element['#type'], $types) !== FALSE)
+        if (array_search($element['#type'], $types) !== FALSE) {
           unset($this->elements[$key]);
+        }
       }
     }
     return $this->elements;
@@ -92,7 +100,8 @@ class WebformAnalysis {
   /**
    * Get Disable Element Types.
    *
-   * @return array Element types.
+   * @return array
+   *   Element types.
    */
   public function getDisableElementTypes() {
     return ['webform_markup', 'fieldset'];
@@ -102,8 +111,10 @@ class WebformAnalysis {
    * Get Component Values Count.
    *
    * @param string $component
+   *   The component name.
    *
-   * @return array Values.
+   * @return array
+   *   Values.
    */
   public function getComponentValuesCount($component) {
 
@@ -128,10 +139,14 @@ class WebformAnalysis {
    * Get Component Rows.
    *
    * @param string $component
+   *   The component name.
    * @param bool $add_header
+   *   The first line data.
    * @param bool $value_label_with_count
+   *   If true, add count to label
    *
-   * @return array Rows.
+   * @return array
+   *   Rows.
    */
   public function getComponentRows($component, $header = array(), $value_label_with_count = FALSE) {
     $rows = [];
@@ -161,8 +176,9 @@ class WebformAnalysis {
    * Get Component title.
    *
    * @param string $component
-   *
-   * @return string Component title.
+   *   The component name.
+   * @return string
+   *   Component title.
    */
   public function getComponentTitle($component) {
     if (!isset($this->getElements()[$component]['#title'])) {
