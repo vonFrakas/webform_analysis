@@ -42,7 +42,7 @@ class WebformAnalysis {
    * @param array $components
    *   The components name.
    */
-  public function setComponents($components = []) {
+  public function setComponents(array $components = []) {
     $this->webform->setSetting('analysis_components', $components);
     $this->webform->save();
   }
@@ -63,7 +63,7 @@ class WebformAnalysis {
    * @param array $chart_type
    *   Set chart type and save webform.
    */
-  public function setChartType($chart_type = []) {
+  public function setChartType(array $chart_type = []) {
     $this->webform->setSetting('analysis_chart_type', $chart_type);
     $this->webform->save();
   }
@@ -118,12 +118,12 @@ class WebformAnalysis {
    */
   public function getComponentValuesCount($component) {
 
-    $query = \Drupal::database()
-        ->select('webform_submission_data', 'wsd')
-        ->fields('wsd', ['value']);
+    $query = \Drupal::database();
+    $query->select('webform_submission_data', 'wsd');
+    $query->fields('wsd', ['value']);
     $query->addExpression('COUNT(value)', 'quantity');
-    $query->condition('webform_id', $this->webform->id())
-          ->condition('name', $component);
+    $query->condition('webform_id', $this->webform->id());
+    $query->condition('name', $component);
     $query->groupBy('wsd.value');
     $records = $query->execute()->fetchAll();
 
@@ -148,7 +148,7 @@ class WebformAnalysis {
    * @return array
    *   Rows.
    */
-  public function getComponentRows($component, $header = [], $value_label_with_count = FALSE) {
+  public function getComponentRows($component, array $header = [], $value_label_with_count = FALSE) {
     $rows = [];
     if ($header) {
       $rows[] = $header;
