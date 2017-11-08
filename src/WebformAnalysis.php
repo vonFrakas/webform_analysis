@@ -60,10 +60,10 @@ class WebformAnalysis {
   /**
    * Set Chart Type.
    *
-   * @param array $chart_type
+   * @param string $chart_type
    *   Set chart type and save webform.
    */
-  public function setChartType(array $chart_type = []) {
+  public function setChartType($chart_type = '') {
     $this->webform->setSetting('analysis_chart_type', $chart_type);
     $this->webform->save();
   }
@@ -118,8 +118,8 @@ class WebformAnalysis {
    */
   public function getComponentValuesCount($component) {
 
-    $query = \Drupal::database();
-    $query->select('webform_submission_data', 'wsd');
+    $db = \Drupal::database();
+    $query = $db->select('webform_submission_data', 'wsd');
     $query->fields('wsd', ['value']);
     $query->addExpression('COUNT(value)', 'quantity');
     $query->condition('webform_id', $this->webform->id());
