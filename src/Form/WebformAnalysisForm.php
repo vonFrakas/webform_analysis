@@ -8,6 +8,8 @@ use Drupal\webform_analysis\WebformAnalysis;
 
 /**
  * Webform Analysis settings form.
+ * 
+ * @author Laurent BARAN <lbaran27@gmail.com>
  */
 class WebformAnalysisForm extends FormBase {
 
@@ -23,7 +25,7 @@ class WebformAnalysisForm extends FormBase {
   /**
    * Get webform title.
    *
-   * @return string title.
+   * @return string Title.
    */
   public function getTitle() {
 
@@ -72,12 +74,12 @@ class WebformAnalysisForm extends FormBase {
         case '':
           $chart['data'] = $this->analysis->getComponentRows($component);
           break;
-        
+
         case 'PieChart':
           $chart['options'] = ['pieHole' => 0.2];
           $chart['data'] = $this->analysis->getComponentRows($component, $header, TRUE);
           break;
-        
+
         default:
           $chart['data'] = $this->analysis->getComponentRows($component, $header);
           break;
@@ -122,7 +124,7 @@ class WebformAnalysisForm extends FormBase {
     ];
 
     $form['actions']['#type'] = 'actions';
-    
+
     $form['actions']['submit'] = [
       '#type'        => 'submit',
       '#value'       => $this->t('Update analysis display'),
@@ -147,10 +149,10 @@ class WebformAnalysisForm extends FormBase {
    */
   public function getComponents() {
 
-    foreach ($this->analysis->getElements() as $element_name => $element){
+    foreach ($this->analysis->getElements() as $element_name => $element) {
       $options[$element_name] = isset($element['#title']) ? $element['#title'] : $element_name;
     }
-    
+
     return [
       '#type'          => 'checkboxes',
       '#options'       => $options,
