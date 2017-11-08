@@ -7,7 +7,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform_analysis\WebformAnalysis;
 
 /**
- * Mailgun Stat settings form.
+ * Webform Analysis settings form.
  */
 class WebformAnalysisForm extends FormBase {
 
@@ -21,13 +21,14 @@ class WebformAnalysisForm extends FormBase {
   }
 
   /**
-   * Get webform title
+   * Get webform title.
+   * 
    * @return string title
    */
   public function getTitle() {
 
     $webform_id = $this->getWebformIdFromRoute();
-    if (empty($webform_id)){
+    if (empty($webform_id)) {
       return '';
     }
 
@@ -41,7 +42,7 @@ class WebformAnalysisForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $webform_id = $this->getWebformIdFromRoute();
-    if (empty($webform_id)){
+    if (empty($webform_id)) {
       return [];
     }
 
@@ -91,14 +92,13 @@ class WebformAnalysisForm extends FormBase {
         ],
       ];
 
-      if (!$chart['type']){
+      if (!$chart['type']) {
         $form['components_data']['component__' . $component]['#data']['#rows'] = $chart['data'];
       }
-      
-      if ($chart['type']){
+
+      if ($chart['type']) {
         $charts[] = $chart;
       }
-      
     }
 
     $form['components_settings'] = [
@@ -138,7 +138,8 @@ class WebformAnalysisForm extends FormBase {
   }
 
   /**
-   * Get Components
+   * Get Components.
+   * 
    * @return array
    */
   public function getComponents() {
@@ -160,9 +161,9 @@ class WebformAnalysisForm extends FormBase {
 
     $this->analysis->setChartType($form_state->getValue('analysis_chart_type'));
 
-    $components   = [];
-    foreach ($form_state->getValue('analysis_components') as $name => $value){
-      if ($value){
+    $components = [];
+    foreach ($form_state->getValue('analysis_components') as $name => $value) {
+      if ($value) {
         $components[] = $name;
       }
     }
@@ -170,12 +171,13 @@ class WebformAnalysisForm extends FormBase {
   }
 
   /**
-   * Get Webform Id
+   * Get Webform Id.
+   * 
    * @return string webform_id
    */
   public function getWebformIdFromRoute() {
     $route = $this->getRouteMatch();
-    if (empty($route)){
+    if (empty($route)) {
       return '';
     }
 
@@ -183,7 +185,7 @@ class WebformAnalysisForm extends FormBase {
     if (empty($webform_id)) {
       return '';
     }
-    
+
     return $webform_id;
   }
 
