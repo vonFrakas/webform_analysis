@@ -13,6 +13,8 @@ class WebformAnalysis {
 
   use StringTranslationTrait;
 
+  const MODULE_NAME = 'webform_analysis';
+
   protected $webform;
   protected $elements;
 
@@ -43,7 +45,7 @@ class WebformAnalysis {
    *   The components name.
    */
   public function setComponents(array $components = []) {
-    $this->webform->setSetting('analysis_components', $components);
+    $this->webform->setThirdPartySetting(static::MODULE_NAME, 'analysis_components', $components);
     $this->webform->save();
   }
 
@@ -54,7 +56,7 @@ class WebformAnalysis {
    *   Components.
    */
   public function getComponents() {
-    return (array) $this->webform->getSetting('analysis_components');
+    return (array) $this->webform->getThirdPartySetting(static::MODULE_NAME, 'analysis_components');
   }
 
   /**
@@ -64,7 +66,7 @@ class WebformAnalysis {
    *   Set chart type and save webform.
    */
   public function setChartType($chart_type = '') {
-    $this->webform->setSetting('analysis_chart_type', $chart_type);
+    $this->webform->setThirdPartySetting(static::MODULE_NAME, 'analysis_chart_type', $chart_type);
     $this->webform->save();
   }
 
@@ -75,7 +77,7 @@ class WebformAnalysis {
    *   Chart type.
    */
   public function getChartType() {
-    return (string) $this->webform->getSetting('analysis_chart_type');
+    return (string) $this->webform->getThirdPartySetting(static::MODULE_NAME, 'analysis_chart_type');
   }
 
   /**
