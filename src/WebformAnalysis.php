@@ -4,7 +4,6 @@ namespace Drupal\webform_analysis;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webform\WebformInterface;
-use Drupal\webform_analysis\WebformAnalysisInterface;
 
 /**
  * WebformAnalysis.
@@ -19,7 +18,7 @@ class WebformAnalysis implements WebformAnalysisInterface {
   /**
    * Construct.
    *
-   * @param WebformInterface $webform_id
+   * @param \Drupal\webform\WebformInterface $webform
    *   The webform entity.
    */
   public function __construct(WebformInterface $webform) {

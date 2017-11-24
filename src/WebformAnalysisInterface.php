@@ -99,4 +99,5 @@ interface WebformAnalysisInterface {
    *   Component title.
    */
   public function getComponentTitle($component);
+
 }
