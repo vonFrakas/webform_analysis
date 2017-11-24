@@ -21,7 +21,7 @@ function webform_analysis_update_8101($sandbox) {
   }
 
   foreach (array_slice($sandbox['webform_ids'], $sandbox['progress'], $sandbox['delta']) as $webform_id) {
-    $sandbox['progress'] ++;
+    $sandbox['progress']++;
     $webform = \Drupal::entityTypeManager()->getStorage('webform')->load($webform_id);
 
     $components = (array) $webform->getSetting('analysis_components');

@@ -4,13 +4,12 @@ namespace Drupal\webform_analysis;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webform\WebformInterface;
+use Drupal\webform_analysis\WebformAnalysisInterface;
 
 /**
  * WebformAnalysis.
- *
- * @author Laurent BARAN <lbaran27@gmail.com>
  */
-class WebformAnalysis {
+class WebformAnalysis implements WebformAnalysisInterface {
 
   use StringTranslationTrait;
 
@@ -28,20 +27,14 @@ class WebformAnalysis {
   }
 
   /**
-   * Get Webform.
-   *
-   * @return object
-   *   Webform.
+   * {@inheritdoc}
    */
   public function getWebform() {
     return $this->webform;
   }
 
   /**
-   * Set components and save webform.
-   *
-   * @param array $components
-   *   The components name.
+   * {@inheritdoc}
    */
   public function setComponents(array $components = []) {
     $this->webform->setThirdPartySetting('webform_analysis', 'components', $components);
@@ -49,20 +42,14 @@ class WebformAnalysis {
   }
 
   /**
-   * Get Components.
-   *
-   * @return array
-   *   Components.
+   * {@inheritdoc}
    */
   public function getComponents() {
     return (array) $this->webform->getThirdPartySetting('webform_analysis', 'components');
   }
 
   /**
-   * Set Chart Type.
-   *
-   * @param string $chart_type
-   *   Set chart type and save webform.
+   * {@inheritdoc}
    */
   public function setChartType($chart_type = '') {
     $this->webform->setThirdPartySetting('webform_analysis', 'chart_type', $chart_type);
@@ -70,20 +57,14 @@ class WebformAnalysis {
   }
 
   /**
-   * Get Chart Type.
-   *
-   * @return array
-   *   Chart type.
+   * {@inheritdoc}
    */
   public function getChartType() {
     return (string) $this->webform->getThirdPartySetting('webform_analysis', 'chart_type');
   }
 
   /**
-   * Get Elements.
-   *
-   * @return array
-   *   Element.
+   * {@inheritdoc}
    */
   public function getElements() {
     if (!$this->elements) {
@@ -99,23 +80,14 @@ class WebformAnalysis {
   }
 
   /**
-   * Get Disable Element Types.
-   *
-   * @return array
-   *   Element types.
+   * {@inheritdoc}
    */
   public function getDisableElementTypes() {
     return ['webform_markup', 'fieldset'];
   }
 
   /**
-   * Get Component Values Count.
-   *
-   * @param string $component
-   *   The component name.
-   *
-   * @return array
-   *   Values.
+   * {@inheritdoc}
    */
   public function getComponentValuesCount($component) {
 
@@ -137,17 +109,7 @@ class WebformAnalysis {
   }
 
   /**
-   * Get Component Rows.
-   *
-   * @param string $component
-   *   The component name.
-   * @param array $header
-   *   The first line data.
-   * @param bool $value_label_with_count
-   *   If true, add count to label.
-   *
-   * @return array
-   *   Rows.
+   * {@inheritdoc}
    */
   public function getComponentRows($component, array $header = [], $value_label_with_count = FALSE) {
     $rows = [];
@@ -175,13 +137,7 @@ class WebformAnalysis {
   }
 
   /**
-   * Get Component title.
-   *
-   * @param string $component
-   *   The component name.
-   *
-   * @return string
-   *   Component title.
+   * {@inheritdoc}
    */
   public function getComponentTitle($component) {
     if (!isset($this->getElements()[$component]['#title'])) {
