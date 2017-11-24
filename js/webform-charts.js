@@ -1,13 +1,17 @@
 (function ($, Drupal, settings) {
+ 'use strict';
 
-  "use strict";
-
+  /**
+   * Webform Analaysis - Charts.
+   *
+   * @type {Drupal~behavior}
+   */
   Drupal.behaviors.WebformCharts = {
     attach: function (context, settings) {
 
       var webformcharts = settings.webformcharts;
 
-      google.charts.load('current', {'packages': webformcharts.packages});
+      google.charts.load('current', {"packages": webformcharts.packages});
 
       google.charts.setOnLoadCallback(function () {
 

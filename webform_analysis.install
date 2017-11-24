@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Webform Analysis - Install.
+ */
+
 use Drupal\webform_analysis\WebformAnalysis;
 
 /**

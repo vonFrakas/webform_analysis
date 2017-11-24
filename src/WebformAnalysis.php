@@ -13,8 +13,6 @@ class WebformAnalysis {
 
   use StringTranslationTrait;
 
-  const MODULE_NAME = 'webform_analysis';
-
   protected $webform;
   protected $elements;
 
@@ -24,8 +22,8 @@ class WebformAnalysis {
    * @param string $webform_id
    *   The webform Id.
    */
-  public function __construct($webform_id) {
-    $this->webform = \Drupal::entityTypeManager()->getStorage('webform')->load($webform_id);
+  public function __construct($webform) {
+    $this->webform = $webform;
   }
 
   /**
@@ -45,7 +43,7 @@ class WebformAnalysis {
    *   The components name.
    */
   public function setComponents(array $components = []) {
-    $this->webform->setThirdPartySetting(static::MODULE_NAME, 'analysis_components', $components);
+    $this->webform->setThirdPartySetting('webform_analysis', 'components', $components);
     $this->webform->save();
   }
 
@@ -56,7 +54,7 @@ class WebformAnalysis {
    *   Components.
    */
   public function getComponents() {
-    return (array) $this->webform->getThirdPartySetting(static::MODULE_NAME, 'analysis_components');
+    return (array) $this->webform->getThirdPartySetting('webform_analysis', 'components');
   }
 
   /**
@@ -66,7 +64,7 @@ class WebformAnalysis {
    *   Set chart type and save webform.
    */
   public function setChartType($chart_type = '') {
-    $this->webform->setThirdPartySetting(static::MODULE_NAME, 'analysis_chart_type', $chart_type);
+    $this->webform->setThirdPartySetting('webform_analysis', 'chart_type', $chart_type);
     $this->webform->save();
   }
 
@@ -77,7 +75,7 @@ class WebformAnalysis {
    *   Chart type.
    */
   public function getChartType() {
-    return (string) $this->webform->getThirdPartySetting(static::MODULE_NAME, 'analysis_chart_type');
+    return (string) $this->webform->getThirdPartySetting('webform_analysis', 'chart_type');
   }
 
   /**

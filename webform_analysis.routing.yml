@@ -5,3 +5,4 @@ entity.webform.results_analysis:
     _title_callback: '\Drupal\webform_analysis\Form\WebformAnalysisForm::getTitle'
   requirements:
     _permission: 'view any webform submission'
+

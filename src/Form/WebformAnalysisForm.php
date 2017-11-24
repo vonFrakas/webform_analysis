@@ -2,18 +2,39 @@
 
 namespace Drupal\webform_analysis\Form;
 
+use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\webform\WebformRequest;
 use Drupal\webform_analysis\WebformAnalysis;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Webform Analysis settings form.
- *
- * @author Laurent BARAN <lbaran27@gmail.com>
  */
 class WebformAnalysisForm extends FormBase {
 
   protected $analysis;
+  protected $entityTypeManager;
+  protected $webformRequest;
+
+  /**
+   * {@inheritdoc}
+   */  
+  public function __construct(EntityTypeManager $entityTypeManager, WebformRequest $webformRequest){
+    $this->entityTypeManager = $entityTypeManager;
+    $this->webformRequest = $webformRequest;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container){
+    return new static(
+        $container->get('entity_type.manager'),
+        $container->get('webform.request')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -30,12 +51,12 @@ class WebformAnalysisForm extends FormBase {
    */
   public function getTitle() {
 
-    $webform_id = $this->getWebformIdFromRoute();
+    $webform_id = $this->webformRequest->getCurrentWebform();
     if (empty($webform_id)) {
       return '';
     }
 
-    $webform = \Drupal::entityTypeManager()->getStorage('webform')->load($webform_id);
+    $webform = $this->entityTypeManager->getStorage('webform')->load($webform_id);
     return $webform->label();
   }
 
@@ -44,12 +65,13 @@ class WebformAnalysisForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    $webform_id = $this->getWebformIdFromRoute();
+    $webform_id = $this->webformRequest->getCurrentWebform();
     if (empty($webform_id)) {
       return [];
     }
 
-    $this->analysis = new WebformAnalysis($webform_id);
+    $webform = $this->entityTypeManager->getStorage('webform')->load($webform_id);
+    $this->analysis = new WebformAnalysis($webform);
 
     $form['components_data'] = [
       '#type'       => 'container',
@@ -176,26 +198,6 @@ class WebformAnalysisForm extends FormBase {
       }
     }
     $this->analysis->setComponents($components);
-  }
-
-  /**
-   * Get Webform Id.
-   *
-   * @return string
-   *   Webform Id.
-   */
-  public function getWebformIdFromRoute() {
-    $route = $this->getRouteMatch();
-    if (empty($route)) {
-      return '';
-    }
-
-    $webform_id = $route->getParameter('webform');
-    if (empty($webform_id)) {
-      return '';
-    }
-
-    return $webform_id;
   }
 
 }
