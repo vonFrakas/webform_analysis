@@ -3,6 +3,7 @@
 namespace Drupal\webform_analysis;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
+use Drupal\webform\WebformInterface;
 
 /**
  * WebformAnalysis.
@@ -19,10 +20,10 @@ class WebformAnalysis {
   /**
    * Construct.
    *
-   * @param string $webform_id
-   *   The webform Id.
+   * @param WebformInterface $webform_id
+   *   The webform entity.
    */
-  public function __construct($webform) {
+  public function __construct(WebformInterface $webform) {
     $this->webform = $webform;
   }
 

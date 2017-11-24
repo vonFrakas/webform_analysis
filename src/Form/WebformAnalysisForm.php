@@ -5,7 +5,7 @@ namespace Drupal\webform_analysis\Form;
 use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\WebformRequest;
+use Drupal\webform\WebformRequestInterface;
 use Drupal\webform_analysis\WebformAnalysis;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -20,8 +20,8 @@ class WebformAnalysisForm extends FormBase {
 
   /**
    * {@inheritdoc}
-   */  
-  public function __construct(EntityTypeManager $entityTypeManager, WebformRequest $webformRequest){
+   */
+  public function __construct(EntityTypeManager $entityTypeManager, WebformRequestInterface $webformRequest) {
     $this->entityTypeManager = $entityTypeManager;
     $this->webformRequest = $webformRequest;
   }
@@ -29,7 +29,7 @@ class WebformAnalysisForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container){
+  public static function create(ContainerInterface $container) {
     return new static(
         $container->get('entity_type.manager'),
         $container->get('webform.request')
