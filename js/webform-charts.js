@@ -1,5 +1,5 @@
 (function ($, Drupal, settings) {
- 'use strict';
+  'use strict';
 
   /**
    * Webform Analaysis - Charts.
@@ -11,7 +11,7 @@
 
       var webformcharts = settings.webformcharts;
 
-      google.charts.load('current', {"packages": webformcharts.packages});
+      google.charts.load('current', {packages: webformcharts.packages});
 
       google.charts.setOnLoadCallback(function () {
 
@@ -19,8 +19,8 @@
 
           var data = new google.visualization.arrayToDataTable(chart.data);
           var options = chart.options;
-          var chart = new google.visualization[chart.type](document.querySelector(chart.selector));
-          chart.draw(data, options);
+          var gchart = new google.visualization[chart.type](document.querySelector(chart.selector));
+          gchart.draw(data, options);
 
         });
       });
