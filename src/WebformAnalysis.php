@@ -18,7 +18,7 @@ class WebformAnalysis implements WebformAnalysisInterface {
   /**
    * Construct.
    *
-   * @param \Drupal\webform\WebformInterface $webform
+   * @param WebformInterface $webform_id
    *   The webform entity.
    */
   public function __construct(WebformInterface $webform) {
@@ -28,16 +28,8 @@ class WebformAnalysis implements WebformAnalysisInterface {
   /**
    * {@inheritdoc}
    */
-  public function getWebform() {
-    return $this->webform;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function setComponents(array $components = []) {
     $this->webform->setThirdPartySetting('webform_analysis', 'components', $components);
-    $this->webform->save();
   }
 
   /**
@@ -52,7 +44,6 @@ class WebformAnalysis implements WebformAnalysisInterface {
    */
   public function setChartType($chart_type = '') {
     $this->webform->setThirdPartySetting('webform_analysis', 'chart_type', $chart_type);
-    $this->webform->save();
   }
 
   /**

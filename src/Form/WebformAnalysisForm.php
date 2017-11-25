@@ -2,46 +2,16 @@
 
 namespace Drupal\webform_analysis\Form;
 
-use Drupal\Core\Entity\EntityTypeManager;
-use Drupal\Core\Form\FormBase;
+use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\webform\WebformRequestInterface;
 use Drupal\webform_analysis\WebformAnalysis;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Webform Analysis settings form.
  */
-class WebformAnalysisForm extends FormBase {
+class WebformAnalysisForm extends EntityForm {
 
   protected $analysis;
-  protected $entityTypeManager;
-  protected $webformRequest;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __construct(EntityTypeManager $entityTypeManager, WebformRequestInterface $webformRequest) {
-    $this->entityTypeManager = $entityTypeManager;
-    $this->webformRequest = $webformRequest;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-        $container->get('entity_type.manager'),
-        $container->get('webform.request')
-    );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getFormId() {
-    return 'webform_analysis_form';
-  }
 
   /**
    * Get webform title.
@@ -50,28 +20,17 @@ class WebformAnalysisForm extends FormBase {
    *   Title.
    */
   public function getTitle() {
-
-    $webform_id = $this->webformRequest->getCurrentWebform();
-    if (empty($webform_id)) {
-      return '';
-    }
-
-    $webform = $this->entityTypeManager->getStorage('webform')->load($webform_id);
-    return $webform->label();
-  }
+    return $this->entity->label();
+  }  
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    $webform_id = $this->webformRequest->getCurrentWebform();
-    if (empty($webform_id)) {
-      return [];
-    }
+    $this->analysis = new WebformAnalysis($this->entity);
 
-    $webform = $this->entityTypeManager->getStorage('webform')->load($webform_id);
-    $this->analysis = new WebformAnalysis($webform);
+    $form['#title'] = $this->getTitle();
 
     $form['components_data'] = [
       '#type'       => 'container',
@@ -152,16 +111,19 @@ class WebformAnalysisForm extends FormBase {
       '#type'        => 'submit',
       '#value'       => $this->t('Update analysis display'),
       '#button_type' => 'primary',
+      '#submit' => ['::submitForm', '::save'],
     ];
 
     $form['#attached']['library'][] = 'webform_analysis/webform_analysis';
-    $form['#attached']['library'][] = 'webform_analysis/webform_charts';
 
-    $form['#attached']['drupalSettings']['webformcharts'] = [
-      'packages' => ['corechart'],
-      'charts'   => $charts,
-    ];
+    if(!$charts) {
+      $form['#attached']['library'][] = 'webform_analysis/webform_charts';
 
+      $form['#attached']['drupalSettings']['webformcharts'] = [
+        'packages' => ['corechart'],
+        'charts'   => $charts,
+      ];
+    }
     return $form;
   }
 

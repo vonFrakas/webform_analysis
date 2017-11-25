@@ -1,7 +1,7 @@
 entity.webform.results_analysis:
   path: '/admin/structure/webform/manage/{webform}/results/analysis'
   defaults:
-    _form: '\Drupal\webform_analysis\Form\WebformAnalysisForm'
-    _title_callback: '\Drupal\webform_analysis\Form\WebformAnalysisForm::getTitle'
+    _entity_form: webform.analysis
   requirements:
-    _permission: 'view any webform submission'
+    _entity_access: webform.submission_view_any
+    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'

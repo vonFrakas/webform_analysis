@@ -19,3 +19,10 @@ function webform_analysis_theme() {
     ],
   ];
 }
+
+/**
+ * Implements hook_entity_type_build().
+ */
+function webform_analysis_entity_type_build(array &$entity_types) {
+  $entity_types['webform']->setFormClass('analysis', 'Drupal\webform_analysis\Form\WebformAnalysisForm');
+}
