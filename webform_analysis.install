@@ -25,18 +25,18 @@ function webform_analysis_update_8101($sandbox) {
     $webform = \Drupal::entityTypeManager()->getStorage('webform')->load($webform_id);
     $analysis = new WebformAnalysis($webform);
 
-    // Get Webform analysis settings
+    // Get Webform analysis settings.
     $components = (array) $webform->getSetting('analysis_components');
     $chart_type = (string) $webform->getSetting('analysis_chart_type');
     if (empty($components) && empty($chart_type)) {
       continue;
     }
 
-    // Copy settings to third party settings
+    // Copy settings to third party settings.
     $analysis->setComponents($components);
     $analysis->setChartType($chart_type);
 
-    // Delete settings from Webform
+    // Delete settings from Webform.
     $settings = $webform->getSettings();
     foreach (['analysis_components', 'analysis_chart_type'] as $setting_name) {
       if (isset($settings[$setting_name])) {
