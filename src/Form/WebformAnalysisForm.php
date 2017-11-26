@@ -116,7 +116,7 @@ class WebformAnalysisForm extends EntityForm {
 
     $form['#attached']['library'][] = 'webform_analysis/webform_analysis';
 
-    if (!$charts) {
+    if ($charts) {
       $form['#attached']['library'][] = 'webform_analysis/webform_charts';
 
       $form['#attached']['drupalSettings']['webformcharts'] = [
