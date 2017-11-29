@@ -163,4 +163,11 @@ class WebformAnalysisForm extends EntityForm {
     $this->analysis->setComponents($components);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function save(array $form, FormStateInterface $form_state) {
+    return $this->analysis->getWebform()->save();
+  }
+
 }

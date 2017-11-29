@@ -8,6 +8,14 @@ namespace Drupal\webform_analysis;
 interface WebformAnalysisInterface {
 
   /**
+   * Get Webform.
+   *
+   * @return \Drupal\webform\WebformInterface
+   *   Webform object.
+   */
+  public function getWebform();
+ 
+  /**
    * Set components and save webform.
    *
    * @param array $components

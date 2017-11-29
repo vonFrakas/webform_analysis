@@ -37,6 +37,13 @@ class WebformAnalysis implements WebformAnalysisInterface {
   /**
    * {@inheritdoc}
    */
+  public function getWebform(){
+    return $this->webform;
+  }
+  
+  /**
+   * {@inheritdoc}
+   */
   public function setComponents(array $components = []) {
     $this->webform->setThirdPartySetting('webform_analysis', 'components', $components);
   }
