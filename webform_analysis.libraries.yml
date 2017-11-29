@@ -7,6 +7,6 @@ webform_charts:
   version: 1.x
   js:
     https://www.gstatic.com/charts/loader.js: {}
-    js/webform-charts.js: {}
+    js/webform_analysis.charts.js: {}
   dependencies:
     - core/jquery
