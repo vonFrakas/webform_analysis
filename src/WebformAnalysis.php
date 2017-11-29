@@ -37,10 +37,10 @@ class WebformAnalysis implements WebformAnalysisInterface {
   /**
    * {@inheritdoc}
    */
-  public function getWebform(){
+  public function getWebform() {
     return $this->webform;
   }
-  
+
   /**
    * {@inheritdoc}
    */

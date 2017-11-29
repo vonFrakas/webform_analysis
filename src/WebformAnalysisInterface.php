@@ -14,7 +14,7 @@ interface WebformAnalysisInterface {
    *   Webform object.
    */
   public function getWebform();
- 
+
   /**
    * Set components and save webform.
    *
