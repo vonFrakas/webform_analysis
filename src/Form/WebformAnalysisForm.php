@@ -22,14 +22,6 @@ class WebformAnalysisForm extends EntityForm {
   public function getTitle() {
     return $this->entity->label();
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function form(array $form, FormStateInterface $form_state) {
-    $form = parent::form($form, $form_state);
-    return $form;
-  }
   
   /**
    * {@inheritdoc}
@@ -132,8 +124,6 @@ class WebformAnalysisForm extends EntityForm {
         'charts'   => $charts,
       ];
     }
-    
-    kint($form);
 
     return $form;
   }
