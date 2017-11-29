@@ -22,7 +22,7 @@ class WebformAnalysisForm extends EntityForm {
   public function getTitle() {
     return $this->entity->label();
   }
-  
+
   /**
    * {@inheritdoc}
    */

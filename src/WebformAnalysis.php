@@ -26,10 +26,10 @@ class WebformAnalysis implements WebformAnalysisInterface {
   public function __construct(EntityInterface $entity) {
     if ($entity instanceof WebformInterface) {
       $this->webform = $entity;
-      $this->entity  = NULL;
+      $this->entity = NULL;
     }
     else {
-      $this->entity  = $entity;
+      $this->entity = $entity;
       $this->webform = $entity->webform->entity;
     }
   }
