@@ -26,6 +26,14 @@ class WebformAnalysisForm extends EntityForm {
   /**
    * {@inheritdoc}
    */
+  public function form(array $form, FormStateInterface $form_state) {
+    $form = parent::form($form, $form_state);
+    return $form;
+  }
+  
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $this->analysis = new WebformAnalysis($this->entity);
@@ -124,6 +132,9 @@ class WebformAnalysisForm extends EntityForm {
         'charts'   => $charts,
       ];
     }
+    
+    kint($form);
+
     return $form;
   }
 

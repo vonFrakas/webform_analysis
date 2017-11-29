@@ -1,8 +1,9 @@
 type: module
-name: 'Webform Analysis'
+name: 'Webform Node Analysis'
 description: 'Enables to obtain statistics on the results of form submissions.'
 package: Webform
 core: '8.x'
 
 dependencies:
-  - webform:webform
+  - webform:webform_node
+  - webform_analysis:webform_analysis

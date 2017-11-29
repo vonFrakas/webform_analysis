@@ -2,6 +2,7 @@
 
 namespace Drupal\webform_analysis;
 
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webform\WebformInterface;
 
@@ -13,16 +14,24 @@ class WebformAnalysis implements WebformAnalysisInterface {
   use StringTranslationTrait;
 
   protected $webform;
+  protected $entity;
   protected $elements;
 
   /**
    * Construct.
    *
-   * @param \Drupal\webform\WebformInterface $webform
-   *   The webform entity.
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity of form.
    */
-  public function __construct(WebformInterface $webform) {
-    $this->webform = $webform;
+  public function __construct(EntityInterface $entity) {
+    if ($entity instanceof WebformInterface) {
+      $this->webform = $entity;
+      $this->entity  = NULL;
+    }
+    else {
+      $this->entity  = $entity;
+      $this->webform = $entity->webform->entity;
+    }
   }
 
   /**
@@ -81,12 +90,19 @@ class WebformAnalysis implements WebformAnalysisInterface {
    */
   public function getComponentValuesCount($component) {
 
-    $db = \Drupal::database();
+    $db    = \Drupal::database();
     $query = $db->select('webform_submission_data', 'wsd');
     $query->fields('wsd', ['value']);
     $query->addExpression('COUNT(value)', 'quantity');
-    $query->condition('webform_id', $this->webform->id());
+    if ($this->entity) {
+      $query->leftJoin('webform_submission', 'ws', 'wsd.sid = ws.sid');
+    }
+    $query->condition('wsd.webform_id', $this->webform->id());
     $query->condition('name', $component);
+    if ($this->entity) {
+      $query->condition('entity_type', $this->entity->getEntityTypeId());
+      $query->condition('entity_id', $this->entity->id());
+    }
     $query->groupBy('wsd.value');
     $records = $query->execute()->fetchAll();
 
