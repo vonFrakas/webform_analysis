@@ -27,7 +27,7 @@ class WebformAnalysisForm extends EntityForm {
    * {@inheritdoc}
    */
   public function getBaseFormId() {
-    // Do not use seven_form_node_form_alter
+    // Do not use seven_form_node_form_alter.
     return NULL;
   }
 
