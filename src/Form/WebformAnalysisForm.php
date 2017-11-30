@@ -26,6 +26,14 @@ class WebformAnalysisForm extends EntityForm {
   /**
    * {@inheritdoc}
    */
+  public function getBaseFormId() {
+    // Do not use seven_form_node_form_alter
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
     $this->analysis = new WebformAnalysis($this->entity);
