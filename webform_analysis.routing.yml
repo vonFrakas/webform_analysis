@@ -4,4 +4,4 @@ entity.webform.results_analysis:
     _entity_form: webform.analysis
   requirements:
     _entity_access: webform.submission_view_any
-    _custom_access: '\Drupal\webform\Access\WebformAccess:checkResultsAccess'
+    _custom_access: '\Drupal\webform\Access\WebformEntityAccess:checkResultsAccess'
