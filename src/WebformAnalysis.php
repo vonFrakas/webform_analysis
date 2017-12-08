@@ -142,7 +142,7 @@ class WebformAnalysis implements WebformAnalysisInterface {
 
       $rows[] = [(string) $value_label, $count];
     }
-   
+
     if ($header && $rows) {
       array_unshift($rows, $header);
     }
