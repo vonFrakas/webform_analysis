@@ -90,7 +90,7 @@ class WebformAnalysisForm extends EntityForm {
         $form['components_data']['component__' . $component]['#data']['#rows'] = $chart['data'];
       }
 
-      if ($chart['type']) {
+      if ($chart['type'] && $chart['data']) {
         $charts[] = $chart;
       }
     }

@@ -126,9 +126,6 @@ class WebformAnalysis implements WebformAnalysisInterface {
    */
   public function getComponentRows($component, array $header = [], $value_label_with_count = FALSE) {
     $rows = [];
-    if ($header) {
-      $rows[] = $header;
-    }
     foreach ($this->getComponentValuesCount($component) as $value => $count) {
       switch ($this->getElements()[$component]['#type']) {
         case 'checkbox':
@@ -144,6 +141,10 @@ class WebformAnalysis implements WebformAnalysisInterface {
       }
 
       $rows[] = [(string) $value_label, $count];
+    }
+   
+    if ($header && $rows) {
+      array_unshift($rows, $header);
     }
 
     return $rows;
