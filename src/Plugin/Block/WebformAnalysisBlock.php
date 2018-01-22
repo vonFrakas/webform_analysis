@@ -33,10 +33,10 @@ class WebformAnalysisBlock extends BlockBase {
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
-        $configuration, 
-        $plugin_id, 
-        $plugin_definition, 
-        $container->get('entity_type.manager'), 
+        $configuration,
+        $plugin_id,
+        $plugin_definition,
+        $container->get('entity_type.manager'),
         $container->get('form_builder')
     );
   }
@@ -151,7 +151,7 @@ class WebformAnalysisBlock extends BlockBase {
 
     $entity_id = $this->configuration['entity_id'];
     $entity = $this->entityTypeManager->getStorage(static::elementEntityTypeId())->load($entity_id);
-    if(!$entity){
+    if (!$entity) {
       return $build;
     }
 
