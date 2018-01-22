@@ -15,8 +15,11 @@
 
       google.charts.setOnLoadCallback(function () {
 
-        webformcharts.charts.forEach(function (chart) {
+        var charts = $.map(webformcharts.charts, function (value, index) {
+          return [value];
+        });
 
+        charts.forEach(function (chart) {
           var data = new google.visualization.arrayToDataTable(chart.data);
           var options = chart.options;
           var gchart = new google.visualization[chart.type](document.querySelector(chart.selector));

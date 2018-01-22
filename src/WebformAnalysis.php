@@ -97,7 +97,7 @@ class WebformAnalysis implements WebformAnalysisInterface {
    */
   public function getComponentValuesCount($component) {
 
-    $db    = \Drupal::database();
+    $db = \Drupal::database();
     $query = $db->select('webform_submission_data', 'wsd');
     $query->fields('wsd', ['value']);
     $query->addExpression('COUNT(value)', 'quantity');
@@ -158,6 +158,17 @@ class WebformAnalysis implements WebformAnalysisInterface {
       return $component;
     }
     return $this->getElements()[$component]['#title'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getChartTypeOptions() {
+    return [
+      ''            => t('Table'),
+      'PieChart'    => t('Pie Chart'),
+      'ColumnChart' => t('Column Chart'),
+    ];
   }
 
 }

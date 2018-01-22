@@ -100,4 +100,12 @@ interface WebformAnalysisInterface {
    */
   public function getComponentTitle($component);
 
+  /**
+   * Get Chart Type Options.
+   *
+   * @return array
+   *   Chart Type Options.
+   */
+  public static function getChartTypeOptions();
+
 }

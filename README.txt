@@ -46,7 +46,7 @@ CONFIGURATION
     3. Check your fields to analyze in "Add analysis component": Your Name, Your
        Email, Subject, Message, or Submit button(s).
     4. Choose what chart type: Table, Pie Chart, or Column Chart.
-    5. Upadte analysis display.
+    5. Update analysis display.
 
 
 MAINTAINERS
