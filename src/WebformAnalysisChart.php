@@ -13,7 +13,7 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface{
 
   protected $entity;
   protected $components;
-  protected $chart_type;
+  protected $chartType;
 
   /**
    * Construct.
@@ -26,9 +26,9 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface{
    *   Chart Type.
    */
   public function __construct(EntityInterface $entity, array $components = [], $chart_type = '') {
-    $this->entity     = $entity;
+    $this->entity = $entity;
     $this->components = $components;
-    $this->chart_type = $chart_type;
+    $this->chartType = $chart_type;
   }
 
   /**
@@ -121,7 +121,7 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface{
    */
   public function createChart($id) {
     return [
-      'type'     => $this->chart_type,
+      'type'     => $this->chartType,
       'options'  => [],
       'selector' => '#' . $id,
       'data'     => [],
