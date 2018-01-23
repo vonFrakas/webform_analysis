@@ -2,8 +2,6 @@
 
 namespace Drupal\webform_analysis;
 
-use Drupal\webform_analysis\WebformAnalysisInterface;
-
 /**
  * Webform Analysis Chart Interface.
  */

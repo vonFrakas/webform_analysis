@@ -4,7 +4,6 @@ namespace Drupal\webform_analysis;
 
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\webform_analysis\WebformAnalysisChartInterface;
 
 /**
  * Webform Analysis Chart.
