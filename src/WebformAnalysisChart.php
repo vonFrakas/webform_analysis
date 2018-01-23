@@ -8,7 +8,7 @@ use Drupal\Core\Entity\EntityInterface;
 /**
  * Webform Analysis Chart.
  */
-class WebformAnalysisChart implements WebformAnalysisChartInterface{
+class WebformAnalysisChart implements WebformAnalysisChartInterface {
 
   protected $entity;
   protected $components;
