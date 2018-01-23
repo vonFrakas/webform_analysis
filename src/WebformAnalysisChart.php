@@ -15,6 +15,16 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface{
   protected $components;
   protected $chart_type;
 
+  /**
+   * Construct.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   Entity.
+   * @param array $components
+   *   Components.
+   * @param string $chart_type
+   *   Chart Type.
+   */
   public function __construct(EntityInterface $entity, array $components = [], $chart_type = '') {
     $this->entity     = $entity;
     $this->components = $components;
@@ -49,7 +59,7 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface{
           break;
 
         case 'PieChart':
-          $chart = $this->buildPieChart($analysis, $component, $header)+$chart;
+          $chart = $this->buildPieChart($analysis, $component, $header) + $chart;
           break;
 
         default:
@@ -63,7 +73,7 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface{
     }
 
     $build['#attached']['library'][] = 'webform_analysis/webform_charts';
-    
+
     if ($charts) {
       $build['#attached'] += $this->buildAttachedSettings($charts);
     }
@@ -131,7 +141,7 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface{
   public function buildPieChart(WebformAnalysisInterface $analysis, $component = '', array $header = []) {
     $data = $analysis->getComponentRows($component, $header, TRUE);
     $options = count($data) > 2 ? ['pieHole' => 0.2] : [];
-    
+
     return [
       'options' => $options,
       'data'    => $data,
@@ -148,7 +158,7 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface{
           'packages' => ['corechart'],
           'charts'   => $charts,
         ],
-      ]
+      ],
     ];
   }
 

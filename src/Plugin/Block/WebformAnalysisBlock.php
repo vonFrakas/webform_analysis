@@ -156,8 +156,8 @@ class WebformAnalysisBlock extends BlockBase {
     }
 
     $chart = new WebformAnalysisChart(
-      $entity, 
-      [$this->configuration['component']], 
+      $entity,
+      [$this->configuration['component']],
       $this->configuration['chart_type']
     );
 
@@ -190,7 +190,7 @@ class WebformAnalysisBlock extends BlockBase {
   /**
    * Get Elements.
    *
-   * @param WebformAnalysisInterface $analysis
+   * @param \Drupal\webform_analysis\WebformAnalysisInterface $analysis
    *   Analaysis.
    *
    * @return array

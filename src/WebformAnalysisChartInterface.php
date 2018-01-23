@@ -8,7 +8,7 @@ use Drupal\webform_analysis\WebformAnalysisInterface;
  * Webform Analysis Chart Interface.
  */
 interface WebformAnalysisChartInterface {
-  
+
   /**
    * Build.
    *
@@ -56,6 +56,7 @@ interface WebformAnalysisChartInterface {
    *
    * @param string $id
    *   Id.
+   *
    * @return array
    *   Renderable.
    */
@@ -89,6 +90,7 @@ interface WebformAnalysisChartInterface {
    *
    * @param array $charts
    *   Charts.
+   *
    * @return array
    *   Attached Settings.
    */
