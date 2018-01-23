@@ -2,7 +2,6 @@
 
 namespace Drupal\webform_analysis\Plugin\Block;
 
-use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Block\BlockBase;
@@ -11,6 +10,7 @@ use Drupal\Core\Form\FormBuilderInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\webform_analysis\WebformAnalysis;
+use Drupal\webform_analysis\WebformAnalysisChart;
 use Drupal\webform_analysis\WebformAnalysisInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -33,11 +33,11 @@ class WebformAnalysisBlock extends BlockBase {
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     return new static(
-        $configuration,
-        $plugin_id,
-        $plugin_definition,
-        $container->get('entity_type.manager'),
-        $container->get('form_builder')
+      $configuration,
+      $plugin_id,
+      $plugin_definition,
+      $container->get('entity_type.manager'),
+      $container->get('form_builder')
     );
   }
 
@@ -48,7 +48,7 @@ class WebformAnalysisBlock extends BlockBase {
 
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entityTypeManager ? $entityTypeManager : \Drupal::entityTypeManager();
-    $this->formBuilder       = $formBuilder ? $formBuilder : \Drupal::formBuilder();
+    $this->formBuilder = $formBuilder ? $formBuilder : \Drupal::formBuilder();
   }
 
   /**
@@ -155,73 +155,13 @@ class WebformAnalysisBlock extends BlockBase {
       return $build;
     }
 
-    $analysis = new WebformAnalysis($entity);
+    $chart = new WebformAnalysisChart(
+      $entity, 
+      [$this->configuration['component']], 
+      $this->configuration['chart_type']
+    );
 
-    $component = $this->configuration['component'];
-    $chart_type = $this->configuration['chart_type'];
-
-    $build['components_data'] = [
-      '#type'       => 'container',
-      '#attributes' => [
-        'class' => ['webform-analysis-data'],
-      ],
-    ];
-
-    $charts = [];
-
-    $header = ['value', 'total'];
-
-    $id = 'webform-chart--' . $component;
-    $id .= '--' . Crypt::randomBytesBase64(8);
-
-    $chart = [
-      'type'     => $chart_type,
-      'options'  => [],
-      'selector' => '#' . $id,
-    ];
-
-    switch ($chart['type']) {
-      case '':
-        $chart['data'] = $analysis->getComponentRows($component);
-        break;
-
-      case 'PieChart':
-        $chart['options'] = ['pieHole' => 0.2];
-        $chart['data'] = $analysis->getComponentRows($component, $header, TRUE);
-        break;
-
-      default:
-        $chart['data'] = $analysis->getComponentRows($component, $header);
-        break;
-    }
-
-    $build['components_data']['component__' . $component] = [
-      '#theme' => 'webform_analysis_component',
-      '#name'  => $component,
-      '#title' => $analysis->getComponentTitle($component),
-      '#data'  => [
-        '#theme'  => 'table',
-        '#prefix' => '<div id="' . $id . '">',
-        '#suffix' => '</div>',
-      ],
-    ];
-
-    if (!$chart['type']) {
-      $build['components_data']['component__' . $component]['#data']['#rows'] = $chart['data'];
-    }
-
-    if ($chart['type'] && $chart['data']) {
-      $charts[$id] = $chart;
-    }
-
-    if ($charts) {
-      $build['#attached']['library'][] = 'webform_analysis/webform_charts';
-
-      $build['#attached']['drupalSettings']['webformcharts'] = [
-        'packages' => ['corechart'],
-        'charts'   => $charts,
-      ];
-    }
+    $chart->build($build);
 
     return $build;
   }
@@ -250,7 +190,7 @@ class WebformAnalysisBlock extends BlockBase {
   /**
    * Get Elements.
    *
-   * @param \Drupal\webform_analysis\WebformAnalysisInterface $analysis
+   * @param WebformAnalysisInterface $analysis
    *   Analaysis.
    *
    * @return array

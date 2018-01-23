@@ -5,6 +5,7 @@ namespace Drupal\webform_analysis\Form;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\webform_analysis\WebformAnalysis;
+use Drupal\webform_analysis\WebformAnalysisChart;
 
 /**
  * Webform Analysis settings form.
@@ -40,60 +41,13 @@ class WebformAnalysisForm extends EntityForm {
 
     $form['#title'] = $this->getTitle();
 
-    $form['components_data'] = [
-      '#type'       => 'container',
-      '#attributes' => [
-        'class' => ['webform-analysis-data'],
-      ],
-    ];
+    $chart = new WebformAnalysisChart(
+      $this->entity,
+      $this->analysis->getComponents(),
+      $this->analysis->getChartType()
+    );
 
-    $charts = [];
-
-    foreach ($this->analysis->getComponents() as $component) {
-
-      $class_css = 'webform-chart--' . $component;
-      $header    = ['value', 'total'];
-
-      $chart = [
-        'type'     => $this->analysis->getChartType(),
-        'options'  => [],
-        'selector' => '.' . $class_css,
-      ];
-
-      switch ($chart['type']) {
-        case '':
-          $chart['data'] = $this->analysis->getComponentRows($component);
-          break;
-
-        case 'PieChart':
-          $chart['options'] = ['pieHole' => 0.2];
-          $chart['data'] = $this->analysis->getComponentRows($component, $header, TRUE);
-          break;
-
-        default:
-          $chart['data'] = $this->analysis->getComponentRows($component, $header);
-          break;
-      }
-
-      $form['components_data']['component__' . $component] = [
-        '#theme' => 'webform_analysis_component',
-        '#name'  => $component,
-        '#title' => $this->analysis->getComponentTitle($component),
-        '#data'  => [
-          '#theme'  => 'table',
-          '#prefix' => '<div class="' . $class_css . '">',
-          '#suffix' => '</div>',
-        ],
-      ];
-
-      if (!$chart['type']) {
-        $form['components_data']['component__' . $component]['#data']['#rows'] = $chart['data'];
-      }
-
-      if ($chart['type'] && $chart['data']) {
-        $charts[] = $chart;
-      }
-    }
+    $chart->build($form);
 
     $form['components_settings'] = [
       '#type'               => 'details',
@@ -106,11 +60,7 @@ class WebformAnalysisForm extends EntityForm {
       '#type'          => 'select',
       '#title'         => $this->t('Charts type'),
       '#default_value' => $this->analysis->getChartType(),
-      '#options'       => [
-        ''            => $this->t('Table'),
-        'PieChart'    => $this->t('Pie Charts'),
-        'ColumnChart' => $this->t('Column Charts'),
-      ],
+      '#options'       => WebformAnalysis::getChartTypeOptions(),
     ];
 
     $form['actions']['#type'] = 'actions';
@@ -123,15 +73,6 @@ class WebformAnalysisForm extends EntityForm {
     ];
 
     $form['#attached']['library'][] = 'webform_analysis/webform_analysis';
-
-    if ($charts) {
-      $form['#attached']['library'][] = 'webform_analysis/webform_charts';
-
-      $form['#attached']['drupalSettings']['webformcharts'] = [
-        'packages' => ['corechart'],
-        'charts'   => $charts,
-      ];
-    }
 
     return $form;
   }
