@@ -74,22 +74,9 @@ class WebformAnalysis implements WebformAnalysisInterface {
    */
   public function getElements() {
     if (!$this->elements) {
-      $this->elements = $this->webform->getElementsDecoded();
-      $types          = $this->getDisableElementTypes();
-      foreach ($this->elements as $key => $element) {
-        if (array_search($element['#type'], $types) !== FALSE) {
-          unset($this->elements[$key]);
-        }
-      }
+      $this->elements = $this->webform->getElementsInitializedFlattenedAndHasValue();
     }
     return $this->elements;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getDisableElementTypes() {
-    return ['webform_markup', 'fieldset'];
   }
 
   /**

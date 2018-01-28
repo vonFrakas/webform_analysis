@@ -56,14 +56,6 @@ interface WebformAnalysisInterface {
   public function getElements();
 
   /**
-   * Get Disable Element Types.
-   *
-   * @return array
-   *   Element types.
-   */
-  public function getDisableElementTypes();
-
-  /**
    * Get Component Values Count.
    *
    * @param string $component
