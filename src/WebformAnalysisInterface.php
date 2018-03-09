@@ -93,6 +93,28 @@ interface WebformAnalysisInterface {
   public function getComponentTitle($component);
 
   /**
+   * Is Int.
+   *
+   * @param string $i
+   *   String Number.
+   *
+   * @return bool
+   *   Is Int.
+   */
+  public function isInt($i = '');
+
+  /**
+   * Cast Numeric.
+   *
+   * @param string $i
+   *   String Number.
+   *
+   * @return string
+   *   Cast Numeric.
+   */
+  public function castNumeric($i = '');
+
+  /**
    * Get Chart Type Options.
    *
    * @return array

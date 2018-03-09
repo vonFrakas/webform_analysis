@@ -101,8 +101,20 @@ class WebformAnalysis implements WebformAnalysisInterface {
     $records = $query->execute()->fetchAll();
 
     $values = [];
+    $allNumeric = TRUE;
     foreach ($records as $record) {
-      $values[$record->value] = (int) $record->quantity;
+      if (is_numeric($record->value)) {
+        $value = $this->castNumeric($record->value);
+      }
+      else {
+        $value = $record->value;
+        $allNumeric = FALSE;
+      }
+      $values[$value] = (int) $record->quantity;
+    }
+
+    if ($allNumeric) {
+      ksort($values);
     }
 
     return $values;
@@ -156,6 +168,20 @@ class WebformAnalysis implements WebformAnalysisInterface {
       'PieChart'    => t('Pie Chart'),
       'ColumnChart' => t('Column Chart'),
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isInt($i = '') {
+    return ($i === (string) (int) $i);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function castNumeric($i = '') {
+    return $this->isInt($i) ? (int) $i : (float) $i;
   }
 
 }
