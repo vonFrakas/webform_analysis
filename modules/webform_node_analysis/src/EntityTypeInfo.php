@@ -73,7 +73,7 @@ class EntityTypeInfo implements ContainerInjectionInterface {
   public function entityOperation(EntityInterface $entity) {
     $operations = [];
     if ($this->currentUser->hasPermission('view any webform submission')) {
-      if ($entity->hasLinkTemplate('webform.results_analysis')) {
+      if (($entity->bundle() === 'webform') && $entity->hasLinkTemplate('webform.results_analysis')) {
         $operations['analysis'] = [
           'title'  => $this->t('Analysis'),
           'weight' => 100,
