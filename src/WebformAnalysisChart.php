@@ -77,6 +77,8 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface {
       $build['#attached'] += $this->buildAttachedSettings($charts);
     }
 
+    $build['#cache'] = ['max-age' => 0];
+
   }
 
   /**
