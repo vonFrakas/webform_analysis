@@ -41,6 +41,10 @@ class WebformAnalysisForm extends EntityForm {
 
     $form['#title'] = $this->getTitle();
 
+    if (!$this->analysis->getWebform()) {
+      return $form;
+    }
+
     $chart = new WebformAnalysisChart(
       $this->entity,
       $this->analysis->getComponents(),

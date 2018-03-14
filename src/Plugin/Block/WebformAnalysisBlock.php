@@ -87,7 +87,7 @@ class WebformAnalysisBlock extends BlockBase {
         'callback' => [$this, 'updateEntity'],
         'wrapper'  => 'edit-component-wrapper',
       ],
-      "#weight"  => $weight++,
+      '#weight'  => $weight++,
     ];
 
     $entity_id = $this->configuration['entity_id'];
@@ -105,21 +105,24 @@ class WebformAnalysisBlock extends BlockBase {
       '#default_value' => $this->configuration['component'],
       '#prefix'        => '<div id="edit-component-wrapper">',
       '#suffix'        => '</div>',
-      "#weight"        => $weight++,
+      '#weight'        => $weight++,
     ];
-
-    if ($webform) {
-      $analysis = new WebformAnalysis($webform);
-      $form['component']['#options'] = static::getElements($analysis);
-    }
 
     $form['chart_type'] = [
       '#type'          => 'select',
       '#title'         => $this->t('Chart type'),
       '#default_value' => $this->configuration['chart_type'],
       '#options'       => WebformAnalysis::getChartTypeOptions(),
-      "#weight"        => $weight++,
+      '#weight'        => $weight++,
     ];
+
+    if ($webform) {
+      $analysis = new WebformAnalysis($webform);
+      if (!$analysis->getWebform()) {
+        return $form;
+      }
+      $form['component']['#options'] = static::getElements($analysis);
+    }
 
     return $form;
   }
