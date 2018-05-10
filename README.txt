@@ -43,8 +43,7 @@ CONFIGURATION
        module and its dependencies.
     2. Navigate to Administration > Structure > Webforms > [Webform to analyze]
        > Results > Analysis for configuration.
-    3. Check your fields to analyze in "Add analysis component": Your Name, Your
-       Email, Subject, Message, or Submit button(s).
+    3. Check your fields to analyze in "Add analysis component".
     4. Choose what chart type: Table, Pie Chart, or Column Chart.
     5. Update analysis display.
 
