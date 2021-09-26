@@ -2,4 +2,4 @@ entity.node.webform.results_analysis:
   title: Analysis
   route_name: entity.node.webform.results_analysis
   parent_id: entity.node.webform.results
-  weight: 40
+  weight: 5
