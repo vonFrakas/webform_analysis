@@ -9,7 +9,15 @@
   Drupal.behaviors.WebformAnalysisCharts = {
     attach: function (context, settings) {
 
+      if(!(context instanceof HTMLDocument)){
+       return;
+      }
+
       var webformcharts = settings.webformcharts;
+
+      if(webformcharts === undefined) {
+        return;
+      }
 
       google.charts.load('current', {packages: webformcharts.packages});
 
@@ -24,7 +32,6 @@
           var options = chart.options;
           var gchart = new google.visualization[chart.type](document.querySelector(chart.selector));
           gchart.draw(data, options);
-
         });
       });
 

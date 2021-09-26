@@ -78,7 +78,6 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface {
     }
 
     $build['#cache'] = ['max-age' => 0];
-
   }
 
   /**
@@ -123,7 +122,7 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface {
   public function createChart($id) {
     return [
       'type'     => $this->chartType,
-      'options'  => [],
+      'options'  => ['title' => ''],
       'selector' => '#' . $id,
       'data'     => [],
     ];
@@ -141,8 +140,7 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface {
    */
   public function buildPieChart(WebformAnalysisInterface $analysis, $component = '', array $header = []) {
     $data = $analysis->getComponentRows($component, $header, TRUE);
-    $options = count($data) > 2 ? ['pieHole' => 0.2] : [];
-
+    $options = count($data) > 2 ? ['pieHole' => 0.2, 'title' => ''] : ['title' => ''];
     return [
       'options' => $options,
       'data'    => $data,
