@@ -162,6 +162,16 @@ class WebformAnalysis implements WebformAnalysisInterface {
   /**
    * {@inheritdoc}
    */
+  public function getComponentType($component) {
+    if (!isset($this->getElements()[$component]['#type'])) {
+      return $component;
+    }
+    return $this->getElements()[$component]['#type'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public static function getChartTypeOptions() {
     return [
       ''            => t('Table'),

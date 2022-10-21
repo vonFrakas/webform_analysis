@@ -93,6 +93,17 @@ interface WebformAnalysisInterface {
   public function getComponentTitle($component);
 
   /**
+   * Get Component type.
+   *
+   * @param string $component
+   *   The component name.
+   *
+   * @return string
+   *   Component type.
+   */
+  public function getComponentType($component);
+
+  /**
    * Is Int.
    *
    * @param string $i

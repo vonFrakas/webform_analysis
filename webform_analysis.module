@@ -17,6 +17,7 @@ function webform_analysis_theme() {
       'variables' => [
         'name'  => '',
         'title' => '',
+        'component_type' => '',
         'data'  => NULL,
       ],
     ],

@@ -101,6 +101,7 @@ class WebformAnalysisChart implements WebformAnalysisChartInterface {
       '#theme' => 'webform_analysis_component',
       '#name'  => $component,
       '#title' => $analysis->getComponentTitle($component),
+      '#component_type'  => $analysis->getComponentType($component),
       '#data'  => [
         '#theme'  => 'table',
         '#prefix' => '<div id="' . $id . '" class="' . $class_css . '">',
