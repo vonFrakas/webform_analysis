@@ -91,7 +91,6 @@ class WebformAnalysis implements WebformAnalysisInterface {
     if ($this->entity) {
       $query->leftJoin('webform_submission', 'ws', 'wsd.sid = ws.sid');
     }
-    $query->condition('wsd.value', "", "!=");
     $query->condition('wsd.webform_id', $this->webform->id());
     $query->condition('name', $component);
     if ($this->entity) {
