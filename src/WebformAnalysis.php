@@ -2,6 +2,7 @@
 
 namespace Drupal\webform_analysis;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\webform\WebformInterface;
@@ -102,7 +103,9 @@ class WebformAnalysis implements WebformAnalysisInterface {
     $records = $query->execute()->fetchAll();
 
     $values = [];
+    $total = (int) 0;
     $allNumeric = TRUE;
+
     foreach ($records as $record) {
       if (is_numeric($record->value)) {
         $value = $this->castNumeric($record->value);
@@ -111,14 +114,38 @@ class WebformAnalysis implements WebformAnalysisInterface {
         $value = $record->value;
         $allNumeric = FALSE;
       }
-      $values[$value] = (int) $record->quantity;
-    }
 
+      $values[$value] = (int) $record->quantity;
+      $total = $total + $values[$value];
+
+    }
     if ($allNumeric) {
       ksort($values);
     }
+    $component_counts = ['values' => $values, 'total' => $total];
 
-    return $values;
+    return $component_counts;
+  }
+  public function getNumberOfAnswerers($component) {
+    $db = \Drupal::database();
+    $query = $db->select('webform_submission_data', 'wsd');
+    $query->fields('wsd', ['sid','name',]);
+    $query->condition('wsd.webform_id', $this->webform->id());
+    $query->condition('name', $component);
+    $results = $query->execute()->fetchAll();
+    $answers = array_reduce($results, function
+    ($carry,  $item) {
+      $item = (array) $item;
+      $carry[] = $item;
+      return $carry;
+    });
+
+    foreach($answers as $answer) {
+      $deduper_key = $answer['sid'] . $answer['name'];
+      $deduped[$deduper_key] = $deduper_key;
+    }
+
+    return count($deduped);
   }
 
   /**
@@ -126,29 +153,129 @@ class WebformAnalysis implements WebformAnalysisInterface {
    */
   public function getComponentRows($component, array $header = [], $value_label_with_count = FALSE) {
     $rows = [];
-    foreach ($this->getComponentValuesCount($component) as $value => $count) {
-      switch ($this->getElements()[$component]['#type']) {
+    $component_values_count = $this->getComponentValuesCount($component);
+    $element_obj = $this->getElements()[$component];
+    $component_count = $component_values_count['values'];
+    $total = $component_values_count['total'];
+    $other_responses = [];
+    $number_of_answerers = $this->getNumberOfAnswerers($component);
+
+    foreach ($component_count as $value => $count) {
+
+      switch ($element_obj['#type']) {
         case 'checkbox':
           $value_label = $value ? $this->t('Yes') : $this->t('No');
           break;
 
+        case 'textarea':
+          $rows[] = [(string) $value];
+          continue 2;
+
         default:
-          $value_label = isset($this->getElements()[$component]['#options'][$value]) ? $this->getElements()[$component]['#options'][$value] : $value;
+          $value_label = $element_obj['#options'][$value] ?? $value;
           break;
       }
+
       if ($value_label_with_count) {
-        $value_label .= ' : ' . $count;
+        $percentage = $this->calculatePercentage($count, $total);
+        $value_label .= ' : ' . $count . ', ' . $percentage;
+      }
+      elseif ($element_obj['#type'] == 'webform_radios_other') {
+        if (in_array($value, $element_obj['#options'])) {
+          $percentage = $this->calculatePercentage($count, $total);
+          $value_label = $element_obj['#options'][$value] ?? $value;
+          $rows[] = [(string) $value_label, $count, $percentage];
+        } else {
+          $other_responses[] = ['response' => $value, 'count' => $count];
+          $other_counts[] = $count;
+        }
+      }
+      elseif ($element_obj['#type'] == 'webform_checkboxes_other') {
+        if (in_array($value, $element_obj['#options'])) {
+          $percentage = $this->calculatePercentage($count, $number_of_answerers);
+          $value_label = $element_obj['#options'][$value] ?? $value;
+          $rows[] = [(string) $value_label, $count, $percentage];
+        } else {
+          $other_responses[] = ['response' => $value, 'count' => $count];
+          $other_counts[] = $count;
+        }
+      }
+      elseif ($element_obj['#type'] == 'webform_checkboxes') {
+          $percentage = $this->calculatePercentage($count, $number_of_answerers);
+          $value_label = $element_obj['#options'][$value] ?? $value;
+          $rows[] = [(string) $value_label, $count, $percentage];
+      }
+      else {
+          $percentage = $this->calculatePercentage($count, $total);
+          $rows[] = [(string) $value_label, $count, $percentage];
+      }
+    }
+    if (!empty($other_responses)) {
+      $count = array_sum($other_counts);
+      if($element_obj['#type'] == 'webform_checkboxes_other') {
+        $percentage = $this->calculatePercentage($count, $number_of_answerers);
+      } else {
+        $percentage = $this->calculatePercentage($count, $total);
       }
 
-      $rows[] = [(string) $value_label, $count];
+      $rows['other'] = [t('<span class="other">Other
+      <small>(view)</small></span>'), $count,
+        $percentage];
+
+      $rows['other_responses'] = [
+        'response' => [
+          'data' => [
+            '#markup' => t('<b>Response</b>'),
+          ],
+          'class' => 'other-response',
+        ],
+        'count' => [
+          'data' => [
+            '#markup' => t('<b>Count</b>'),
+          ],
+          'class' => 'other-response',
+          'colspan' => 2,
+        ],
+      ];
+
+      foreach($other_responses as $key => $other_response) {
+        $rows['other_' . $key] = [
+          'other_value' => [
+            'data' => [
+              '#markup' => $other_response['response'],
+            ],
+            'class' => 'other-response response',
+            'id' => 'response-' . $key,
+          ],
+          'other_value_count' => [
+            'data' => [
+              '#markup' => $other_response['count'],
+            ],
+            'class' => 'other-response count',
+            'id' => 'count-' . $key,
+            'colspan' => 2,
+          ],
+        ];
+
+      }
     }
 
     if ($header && $rows) {
       array_unshift($rows, $header);
     }
+    if ($element_obj['#type'] == 'webform_checkboxes_other' || $element_obj['#type'] == 'webform_checkboxes') {
+        $rows['xyz'] = [(string) 'Number of answerers', '',
+          $number_of_answerers];
+    }
 
     return $rows;
   }
+
+  private function calculatePercentage($count, $total): string {
+    $calc_percentage = ($count / $total) * 100;
+    return round($calc_percentage, 1) . '%';
+  }
+
 
   /**
    * {@inheritdoc}
