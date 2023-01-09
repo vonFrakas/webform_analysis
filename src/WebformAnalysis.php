@@ -133,6 +133,7 @@ class WebformAnalysis implements WebformAnalysisInterface {
     $query->condition('wsd.webform_id', $this->webform->id());
     $query->condition('name', $component);
     $results = $query->execute()->fetchAll();
+
     $answers = array_reduce($results, function
     ($carry,  $item) {
       $item = (array) $item;
@@ -140,12 +141,16 @@ class WebformAnalysis implements WebformAnalysisInterface {
       return $carry;
     });
 
-    foreach($answers as $answer) {
-      $deduper_key = $answer['sid'] . $answer['name'];
-      $deduped[$deduper_key] = $deduper_key;
+    if (!$answers) {
+      return 0;
     }
-
-    return count($deduped);
+    else {
+      foreach($answers as $answer) {
+        $deduper_key = $answer['sid'] . $answer['name'];
+        $deduped[$deduper_key] = $deduper_key;
+      }
+      return count($deduped);
+    }
   }
 
   /**
@@ -154,6 +159,7 @@ class WebformAnalysis implements WebformAnalysisInterface {
   public function getComponentRows($component, array $header = [], $value_label_with_count = FALSE) {
     $rows = [];
     $component_values_count = $this->getComponentValuesCount($component);
+
     $element_obj = $this->getElements()[$component];
     $component_count = $component_values_count['values'];
     $total = $component_values_count['total'];
